@@ -1,0 +1,71 @@
+= Probes
+
+[qanda]
+What is a probe?::
+A probe is a requirement addressed to the implementation discipline: allow me to
+  measure exactly here!
+
+How is a probe described in this git repo?::
+Each probe is one file. The filename is the probe's name.
+
+What is the content of this 'probe file'?::
+
+It's an ASCII text file that contains JSON formatted text. There're JSON objects
+in, which are name/value pairs. The most important pair is the
+domain-specific-class/domain-specific-name, such as "SW_ASAP"/"FYAWRATE".
+
+How can I figure out which DAQ name is mapped to a given probe name?::
+
+Planned: command line tool, e.g.
+----
+$ probe2daq --sw_techbranch=VC SP__filt_yaw_rate
+-> FYAWRATE
+$ probe2daq --sw_version=CT_ZT8000412 SP__filt_yaw_rate
+-> FYAWRATE
+$ probe2daq --ecu_version=HWID00815 SP__Combo3_SPI
+-> PAD15
+$ probe2daq SP__brake_disc_temp_FL
+-> <unknown external sensor>
+----
+
+[qanda]
+This probe2daq tool, where can I find it?::
+
+It's included in the git repository.
+
+What are the syntactical rules for probe names?::
+
+`SP__[a-zA-Z0-9_]*` SP stands for "System Probe". Because probe names are used
+as filenames, we restrict ourselves to a subset of filesystem naming rules.
+Moreover, we don't allow spaces in order to have a chance to reuse existing
+domain specific names (ASAP names e.g. have to be space-free).
+
+What are the syntactical rules for the domain-specific-classes?::
+
+ME_TEMP: temperature measuring point
+ME_ACC: acceleration measuring point
+ME_PRES: hydraulic or pneumatic pressure measuring point
+EE_BUS: one or more electrical connections where the signals can be decoded by an
+external device (e.g. CLK, CS, MISO, MOSI of an SPI bus or CAN_H, CAN_L of a CAN
+bus) +
+EE_VOLT: electrical connection to measure voltages +
+EE_CURR: electrical interface to measure currents
+SW_ASAP: representation of a scalar number in the RAM of the micro-controller
+
+Why git? Why that complicated? Why not an Excel table?::
+
+The mapping of probe names to DAQ names depends on various factors: Several ASAP
+names in SW have changed from TB2013 to Vison Controls, ASAP names may change
+over time, HW test pads may get different names for different PCB layouts, etc.
+Means: the mapping information is as volatile as the implementations are. As
+much of this mapping information should be standard, but implementation specific
+deviations must be maintainable efficiently.
+
+Sounds like the need for a database application. Why not using a full grown database?::
+
+Real databases (SQL or noSQL databases) tend to be complex and complicated.
+There are only few developers in VED R&D that are familiar with the
+administration of such tools. On the other hand, we have already a running git
+and github toolchain with a large user base. Both tools are widesprad standard
+tools in the IT area which means that a huge amount of documentation,
+information and support is only one Google-search away.

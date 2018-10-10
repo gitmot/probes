@@ -1,0 +1,8 @@
+{
+  "DAQObj": {
+    "DAQType": "SW_ASAP",
+    "DAQName": "PRESMAIN"
+  },
+  "maxSampTus": 10000,
+  "timestamp_accuracy_us": 10000
+}

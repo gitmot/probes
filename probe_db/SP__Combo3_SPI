@@ -1,0 +1,8 @@
+{
+  "DAQObj": {
+    "DAQType": "EE_BUS",
+    "DAQName": "SPI_BUS"
+  },
+  "maxSampTus": 10000,
+  "timestamp_accuracy_us": 10000
+}
